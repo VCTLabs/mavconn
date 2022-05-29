@@ -1,3 +1,4 @@
+import warnings
 import pytest
 
 from mavconn.mavconn import MAVLinkConnection
@@ -63,7 +64,7 @@ def test_initialization():
     assert test_mav._stacks == test_stack
     handler_test = test_mav.pop_handler('TELEMETRY')
     assert handler_test == 'handler3'
-    with pytest.raises(KeyError, message="That message name key does not exist!"):
+    with pytest.raises(KeyError):
         test_mav.pop_handler('TELEMETRY')
     test_mav.clear_handler('TELEMETRY')
     test_mav.clear_handler()
@@ -111,26 +112,22 @@ def test_add_timer_work(mocker):
         assert threading.active_count() == 1
 
 def test_wrapper(mocker):
-    #mocker.patch.object(Mav, 'ping_send')
-    #mocker.patch.object(Mav, 'heartbeat_send')
     mav = Mav()
-    with mocker.patch.object(mav, 'ping_send', wraps=mav.ping_send) as ps:
-        with mocker.patch.object(mav, 'heartbeat_send', wraps=mav.heartbeat_send) as hbs:
-        
-            futures = []
-            mock_mav = MockMavWrapper(mav)
-            test_case = MAVLinkConnection(mock_mav)
-            mav.ping_send.assert_not_called()
-            threadpool = ThreadPoolExecutor()
-            futures.append(threadpool.submit(test_case.heartbeat_send))
-            futures.append(threadpool.submit(test_case.ping_send))
-            assert futures[0].done() is not True
-            time.sleep(3)
-            mav.ping_send.assert_not_called()
-            assert futures[1].done() is not True
-            time.sleep(3)
-            mav.ping_send.assert_called_with()
-            assert futures[0].done() is True
-            assert futures[1].done() is True
-            threadpool.shutdown()
-    
+    mocker.patch.object(Mav, 'ping_send', wraps=mav.ping_send)
+    mocker.patch.object(Mav, 'heartbeat_send', wraps=mav.heartbeat_send)
+    futures = []
+    mock_mav = MockMavWrapper(mav)
+    test_case = MAVLinkConnection(mock_mav)
+    mav.ping_send.assert_not_called()
+    threadpool = ThreadPoolExecutor()
+    futures.append(threadpool.submit(test_case.heartbeat_send))
+    futures.append(threadpool.submit(test_case.ping_send))
+    assert futures[0].done() is not True
+    time.sleep(3)
+    mav.ping_send.assert_not_called()
+    assert futures[1].done() is not True
+    time.sleep(3)
+    mav.ping_send.assert_called_with()
+    assert futures[0].done() is True
+    assert futures[1].done() is True
+    threadpool.shutdown()
