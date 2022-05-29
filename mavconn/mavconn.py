@@ -151,16 +151,17 @@ class MAVLinkConnection:
     def timer_work(self):
         """Target for the timer thread. Processes timers from/to the heap queue"""
         def get_cont_val():
-            """Returns boolean which controls if
-                thread should keep running"""
+            """Returns boolean which controls if thread should keep running"""
             with self._continue_lock:
                 return self._continue
+
         def timer_status():
             """Returns boolean and checks if heap is not empty"""
             return self._timers != []
+
         while get_cont_val():
             with self._timers_cv:
-                self._timers_cv.wait_for(timer_status) #check if heap is empty
+                self._timers_cv.wait_for(timer_status)  # check if heap is empty
                 current_timer = heappop(self._timers)
             current_timer.handle(self)
             with self._timers_cv:
@@ -170,10 +171,10 @@ class MAVLinkConnection:
     def listening_work(self):
         """Target for the listening thread."""
         def get_cont_val():
-            """Returns boolean which controls if
-                thread should keep running"""
+            """Returns boolean which controls if thread should keep running"""
             with self._continue_lock:
                 return self._continue
+
         while get_cont_val():
             with self._stacks_lock:
                 mav_message = self._mavfile.recv_match(
@@ -183,7 +184,7 @@ class MAVLinkConnection:
                     self._futures = [x for x in self._futures if not x.done()]
                     self._futures.append(self._threadpool.submit(
                         handler, self, mav_message))
-                except:
+                except BaseException:
                     try:
                         handler = self._stacks['*'][-1]
                         self._futures = [x for x in self._futures if not x.done()]
