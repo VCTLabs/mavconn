@@ -1,0 +1,19 @@
+[MASTER]
+
+fail-under=10.0
+ignore=_version.py
+suggestion-mode=yes
+
+[MESSAGES CONTROL]
+
+[REPORTS]
+output-format=colorized
+
+[CLASSES]
+
+exclude-protected=
+    _threadpool,
+
+[DESIGN]
+
+max-attributes=12

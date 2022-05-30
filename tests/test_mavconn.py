@@ -64,8 +64,10 @@ def test_initialization():
     assert test_mav._stacks == test_stack
     handler_test = test_mav.pop_handler('TELEMETRY')
     assert handler_test == 'handler3'
-    with pytest.raises(KeyError):
+    with pytest.raises(KeyError) as exc_info:
         test_mav.pop_handler('TELEMETRY')
+    assert exc_info.type is KeyError
+    assert exc_info.value.args[0] == 'That message name key does not exist!'
     test_mav.clear_handler('TELEMETRY')
     test_mav.clear_handler()
     assert test_mav._stacks == test_clear

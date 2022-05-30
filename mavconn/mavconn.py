@@ -116,8 +116,8 @@ class MAVLinkConnection:
             try:
                 handler = self._stacks[message_name].pop()
                 return handler
-            except (KeyError, IndexError):
-                raise KeyError('That message name key does not exist!')
+            except (KeyError, IndexError) as exc:
+                raise KeyError('That message name key does not exist!') from exc
 
     def clear_handler(self, message_name=None):
         """Removes all handlers in the stack assoc. with a given MAVLink message type
@@ -157,7 +157,7 @@ class MAVLinkConnection:
 
         def timer_status():
             """Returns boolean and checks if heap is not empty"""
-            return self._timers != []
+            return self._timers
 
         while get_cont_val():
             with self._timers_cv:
@@ -184,7 +184,7 @@ class MAVLinkConnection:
                     self._futures = [x for x in self._futures if not x.done()]
                     self._futures.append(self._threadpool.submit(
                         handler, self, mav_message))
-                except BaseException:
+                except BaseException:  # pylint: disable=broad-except
                     try:
                         handler = self._stacks['*'][-1]
                         self._futures = [x for x in self._futures if not x.done()]
@@ -251,10 +251,9 @@ class Timer:
     def __eq__(self, other):
         if self is other:
             return True
-        elif type(self) != type(other):
+        if not self.__class__ == other.__class__:
             return False
-        else:
-            return self._next_time == other._next_time
+        return self._next_time == other._next_time
 
     def __lt__(self, other):
         return self._next_time < other._next_time
