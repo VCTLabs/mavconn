@@ -1,4 +1,6 @@
+""" This is an example core module, use as needed. """
 
-# This is an example function, remove it.
-def capital_case(x):
-    return x.capitalize()
+
+def capital_case(ex_str):
+    """ This is an example function, remove it as needed. """
+    return ex_str.capitalize()

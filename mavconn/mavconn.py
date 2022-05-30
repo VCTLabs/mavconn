@@ -13,38 +13,34 @@ from heapq import heappush, heappop
 class MAVLinkConnection:
     """Manages threads that handle mavlink messages
 
-    Attributes
-    ----------
-        _mavfile : ()
-            A generic mavlink port
-        _mav_lock : ()
-            Threading lock for mavfile
-        _timer_thread : ()
-            Thread that manages timers associated with periodic handlers
-        _listening_thread : ()
-            Thread that listens for mav messages and passes handlers to threadpool
-        _threadpool : ()
-            Pool of worker threads that execute handlers passed from timer/listening
-            threads
-        _stacks_lock: ()
-            Threading lock for _stacks
-        _stacks : (dict of str: func)
-            Contains stacks for various MAVLink message types and the associated
-            handlers for those message types. For example,
-            {'Heartbeat',[handler1, handler2, handler3']}
-        _futures : (list)
-            Contains futures from jobs submitted to threadpool to keep track of
-            unfinished jobs
-        _timers : (list)
-            A heap queue that stores and compares handlers based on
-            the time to next call.
-        _timers_cv: ()
-            A condition variable that notifies the timer thread to start
-            when a timer is added into the _timers heap queue.
-        _continue: (bool)
-            Keeps timer thread active in a loop while True.
-        _continue_lock: ()
-            Lock for _continue to ensure the boolean value can be toggled.
+    :param _mavfile: A generic mavlink port
+    :param _mav_lock: Threading lock for mavfile
+    :param _timer_thread:
+        Thread that manages timers associated with periodic handlers
+    :param _listening_thread:
+        Thread that listens for mav messages and passes handlers to threadpool
+    :param _threadpool:
+        Pool of worker threads that execute handlers passed from timer/listening
+        threads
+    :param _stacks_lock:
+        Threading lock for _stacks
+    :param _stacks: (dict of str: func)
+        Contains stacks for various MAVLink message types and the associated
+        handlers for those message types. For example,
+        {'Heartbeat',[handler1, handler2, handler3']}
+    :param _futures: (list)
+        Contains futures from jobs submitted to threadpool to keep track of
+        unfinished jobs
+    :param _timers: (list)
+        A heap queue that stores and compares handlers based on
+        the time to next call.
+    :param _timers_cv:
+        A condition variable that notifies the timer thread to start
+        when a timer is added into the _timers heap queue.
+    :param _continue: (bool)
+        Keeps timer thread active in a loop while True.
+    :param _continue_lock:
+        Lock for _continue to ensure the boolean value can be toggled.
     """
 
     def __init__(self, mavfile):
@@ -87,11 +83,9 @@ class MAVLinkConnection:
     def push_handler(self, message_name, handler):
         """Pushes MAVLink message and associated handler unto appropriate stack
 
-        Parameters
-        ----------
-        message_name : (str)
+        :param message_name: (str)
             The type of MAVLink message. For example, 'HEARTBEAT'
-        handler : (func)
+        :param handler: (func)
             The function that is to be performed
             (associated with a type of MAVLink message)
         """
@@ -101,14 +95,10 @@ class MAVLinkConnection:
     def pop_handler(self, message_name):
         """Pops the last handler in a stack with a given MAVLink message type
 
-        Parameters
-        ----------
-        message_name : (str)
+        :param message_name: (str)
             The type of MAVlink message. For example, 'HEARTBEAT'
 
-        Returns
-        -------
-        handler : (func)
+        :return handler: (func)
             The function that is to be performed
             (associated with a type of MAVLink message)
         """
@@ -116,15 +106,13 @@ class MAVLinkConnection:
             try:
                 handler = self._stacks[message_name].pop()
                 return handler
-            except (KeyError, IndexError):
-                raise KeyError('That message name key does not exist!')
+            except (KeyError, IndexError) as exc:
+                raise KeyError('That message name key does not exist!') from exc
 
     def clear_handler(self, message_name=None):
         """Removes all handlers in the stack assoc. with a given MAVLink message type
 
-        Parameters
-        ----------
-        message_name : (str)
+        :param message_name: (str)
             The type of MAVLink message. For example, 'HEARTBEAT'
         """
         with self._stacks_lock:
@@ -136,11 +124,9 @@ class MAVLinkConnection:
     def add_timer(self, period, handler):
         """Adds a timer object to heap queue with assoc. repeating period and handler
 
-        Parameters
-        ----------
-        period : (int)
+        :param period: (int)
             The time period in seconds between each time the handler should be called
-        handler : (func)
+        :param handler: (func)
             The function that is to be performed at intervals indicated by
             the timer period)
         """
@@ -151,16 +137,17 @@ class MAVLinkConnection:
     def timer_work(self):
         """Target for the timer thread. Processes timers from/to the heap queue"""
         def get_cont_val():
-            """Returns boolean which controls if
-                thread should keep running"""
+            """Returns boolean which controls if thread should keep running"""
             with self._continue_lock:
                 return self._continue
+
         def timer_status():
             """Returns boolean and checks if heap is not empty"""
-            return self._timers != []
+            return self._timers
+
         while get_cont_val():
             with self._timers_cv:
-                self._timers_cv.wait_for(timer_status) #check if heap is empty
+                self._timers_cv.wait_for(timer_status)  # check if heap is empty
                 current_timer = heappop(self._timers)
             current_timer.handle(self)
             with self._timers_cv:
@@ -170,10 +157,10 @@ class MAVLinkConnection:
     def listening_work(self):
         """Target for the listening thread."""
         def get_cont_val():
-            """Returns boolean which controls if
-                thread should keep running"""
+            """Returns boolean which controls if thread should keep running"""
             with self._continue_lock:
                 return self._continue
+
         while get_cont_val():
             with self._stacks_lock:
                 mav_message = self._mavfile.recv_match(
@@ -183,7 +170,7 @@ class MAVLinkConnection:
                     self._futures = [x for x in self._futures if not x.done()]
                     self._futures.append(self._threadpool.submit(
                         handler, self, mav_message))
-                except:
+                except BaseException:  # pylint: disable=broad-except
                     try:
                         handler = self._stacks['*'][-1]
                         self._futures = [x for x in self._futures if not x.done()]
@@ -204,22 +191,20 @@ class Timer:
     """Creates objects with a time period interval, handler, and next calendar
     time for handler call.
 
-    Note
-    ----
+    Note:
+
     Timer objects are comparable based on their _next_time attribute.
     This is useful for popping and pushing onto the heap queue.
 
-    Attributes
-    ----------
-        _period : (int)
-            Time interval in seconds between when a handler is called and the next
-            time the handler should be called.
-        _handler : (func)
-            The function that is to be performed at intervals indicated by
-            the timer period
-        _next_time : (datetime)
-            A datetime that indicates the next calendar time a handler
-            should be called.
+    :param _period: (int)
+        Time interval in seconds between when a handler is called and the next
+        time the handler should be called.
+    :param _handler: (func)
+        The function that is to be performed at intervals indicated by
+        the timer period
+    :param _next_time: (datetime)
+        A datetime that indicates the next calendar time a handler
+        should be called.
     """
 
     def __init__(self, period, handler):
@@ -250,10 +235,9 @@ class Timer:
     def __eq__(self, other):
         if self is other:
             return True
-        elif type(self) != type(other):
+        if not self.__class__ == other.__class__:
             return False
-        else:
-            return self._next_time == other._next_time
+        return self._next_time == other._next_time
 
     def __lt__(self, other):
         return self._next_time < other._next_time

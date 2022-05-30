@@ -10,6 +10,7 @@ __pycache__/
 *.so
 
 # Distribution / packaging
+mavconn/_version.py
 .Python
 env/
 build/
@@ -66,6 +67,7 @@ instance/
 
 # Sphinx documentation
 docs/_build/
+docs/source/api
 
 # PyBuilder
 target/
