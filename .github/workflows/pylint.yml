@@ -19,9 +19,9 @@ jobs:
       path: ${{ steps.analyze.outputs.path }}
 
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
       with:
-        depth: 0
+        fetch-depth: 0
 
     - name: Extract base branch name
       id: extract_branch
