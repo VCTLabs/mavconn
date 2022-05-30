@@ -88,4 +88,4 @@ jobs:
           draft: false
           prerelease: false
           files: |
-            wheels/cp210x*.whl
+            wheels/mav*.whl

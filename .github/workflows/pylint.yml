@@ -20,6 +20,8 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
+      with:
+        depth: 0
 
     - name: Extract base branch name
       id: extract_branch

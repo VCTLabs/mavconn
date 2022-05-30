@@ -78,6 +78,4 @@ jobs:
 
       - name: Check wheel install
         run: |
-          pip install pyusb
           bash -c 'export WHL=$(ls wheels/*.whl); python -m pip install $WHL'
-          cp210x-program.py --version
