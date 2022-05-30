@@ -1,13 +1,6 @@
 #!/usr/bin/env python
-import sys
-from setuptools import setup
 
-# Should match pyproject.toml
-SETUP_REQUIRES = ['setuptools >= 42', 'versioningit']
-# This enables setuptools to install wheel on-the-fly
-SETUP_REQUIRES += ['wheel'] if 'bdist_wheel' in sys.argv else []
+import setuptools
 
-if __name__ == '__main__':
-    setup(
-        setup_requires=SETUP_REQUIRES,
-    )
+if __name__ == "__main__":
+    setuptools.setup()

@@ -27,7 +27,7 @@ jobs:
           git config --global core.autocrlf false
           git config --global core.eol lf
 
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
           fetch-depth: 0
 
@@ -43,7 +43,7 @@ jobs:
 
       - name: Build dist pkgs
         run: |
-          tox -e deploy
+          tox -e deploy,check
 
       - name: Upload artifacts
         if: matrix.python-version == 3.8 && runner.os == 'Linux'
@@ -51,33 +51,3 @@ jobs:
         with:
           name: wheels
           path: ./dist/*.whl
-
-  check_artifact:
-    name: Check wheel artifact
-    needs: [build]
-    runs-on: ${{ matrix.os }}
-    defaults:
-      run:
-        shell: bash
-    env:
-      PYTHONIOENCODING: utf-8
-    strategy:
-      fail-fast: false
-      matrix:
-        os: [ubuntu-latest, macos-latest, windows-latest]
-        python-version: [3.6, 3.8, '3.10']
-
-    steps:
-      - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v2
-        with:
-          python-version: ${{ matrix.python-version }}
-
-      # download all artifacts to project dir
-      - uses: actions/download-artifact@v2
-
-      - name: Check wheel install
-        run: |
-          pip install pyusb
-          bash -c 'export WHL=$(ls wheels/*.whl); python -m pip install $WHL'
-          cp210x-program.py --version

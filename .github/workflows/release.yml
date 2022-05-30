@@ -27,7 +27,7 @@ jobs:
         git config --global core.autocrlf false
         git config --global core.eol lf
 
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
       with:
         fetch-depth: 0
 
@@ -88,4 +88,4 @@ jobs:
           draft: false
           prerelease: false
           files: |
-            wheels/cp210x*.whl
+            wheels/mav*.whl
