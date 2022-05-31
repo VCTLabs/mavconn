@@ -1,4 +1,4 @@
-# internal coverage with PR comment and badge v0.0.3
+# internal coverage with PR comment and badge v0.0.4
 # Note this works for public orgs but probably only for "internal"
 # pull requests. In the case of fork PRs, there needs to be org-level
 # github app with private key => ACCESS_TOKEN, with more job isolation
@@ -170,7 +170,7 @@ jobs:
       env:
         VALUE: "Branch Rate"
       run: |
-        COVERAGE=$( cat code-coverage-results.txt | grep -e ^Summary | grep -o -E "${VALUE} = .{2}" | awk '{ print $4 }' )
+        COVERAGE=$( cat code-coverage-results.txt | grep -e ^Summary | grep -o -E "${VALUE} = .{3}" | egrep -o '([0-9]+)' )
         echo "##[set-output name=coverage;]${COVERAGE}"
         echo "##[set-output name=coverage-rounded-display;]${COVERAGE}%"
         echo "Current coverage is: ${COVERAGE}%"
