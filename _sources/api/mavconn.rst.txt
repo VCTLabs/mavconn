@@ -1,0 +1,19 @@
+mavconn package
+===============
+
+Submodules
+----------
+
+.. toctree::
+   :maxdepth: 4
+
+   mavconn.core
+   mavconn.mavconn
+
+Module contents
+---------------
+
+.. automodule:: mavconn
+   :members:
+   :undoc-members:
+   :show-inheritance:

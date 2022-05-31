@@ -1,0 +1,7 @@
+mavconn.mavconn module
+======================
+
+.. automodule:: mavconn.mavconn
+   :members:
+   :undoc-members:
+   :show-inheritance:

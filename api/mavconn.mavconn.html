@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>mavconn.mavconn module &mdash; MAVConn 0.1.1.dev17 documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../_static/doctools.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="prev" title="mavconn.core module" href="mavconn.core.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../index.html" class="icon icon-home"> MAVConn
+          </a>
+              <div class="version">
+                0.1.1.dev17
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../README.html">mavconn</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">mavconn</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="mavconn.html">mavconn package</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="mavconn.html#submodules">Submodules</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="mavconn.core.html">mavconn.core module</a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#">mavconn.mavconn module</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="mavconn.html#module-mavconn">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">MAVConn</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="modules.html">mavconn</a> &raquo;</li>
+          <li><a href="mavconn.html">mavconn package</a> &raquo;</li>
+      <li>mavconn.mavconn module</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/api/mavconn.mavconn.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-mavconn.mavconn">
+<span id="mavconn-mavconn-module"></span><h1>mavconn.mavconn module<a class="headerlink" href="#module-mavconn.mavconn" title="Permalink to this heading"></a></h1>
+<p>Library provides a threadsafe, callback-based interface
+to the Python MAVLink library</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="mavconn.mavconn.MAVLinkConnection">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mavconn.mavconn.</span></span><span class="sig-name descname"><span class="pre">MAVLinkConnection</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mavfile</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mavconn/mavconn.html#MAVLinkConnection"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mavconn.mavconn.MAVLinkConnection" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Manages threads that handle mavlink messages</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>_mavfile</strong> – A generic mavlink port</p>
+</dd>
+<dt class="field-even">Attribute _mav_lock</dt>
+<dd class="field-even"><p>Threading lock for mavfile</p>
+</dd>
+<dt class="field-odd">Attribute _timer_thread</dt>
+<dd class="field-odd"><p>Thread that manages timers associated with periodic handlers</p>
+</dd>
+<dt class="field-even">Attribute _listening_thread</dt>
+<dd class="field-even"><p>Thread that listens for mav messages and passes handlers to threadpool</p>
+</dd>
+<dt class="field-odd">Attribute _threadpool</dt>
+<dd class="field-odd"><p>Pool of worker threads that execute handlers passed from timer/listening
+threads</p>
+</dd>
+<dt class="field-even">Attribute _stacks_lock</dt>
+<dd class="field-even"><p>Threading lock for _stacks</p>
+</dd>
+<dt class="field-odd">Attribute _stacks</dt>
+<dd class="field-odd"><p>(dict of str: func)
+Contains stacks for various MAVLink message types and the associated
+handlers for those message types. For example,
+{‘Heartbeat’,[handler1, handler2, handler3’]}</p>
+</dd>
+<dt class="field-even">Attribute _futures</dt>
+<dd class="field-even"><p>(list)
+Contains futures from jobs submitted to threadpool to keep track of
+unfinished jobs</p>
+</dd>
+<dt class="field-odd">Attribute _timers</dt>
+<dd class="field-odd"><p>(list)
+A heap queue that stores and compares handlers based on
+the time to next call.</p>
+</dd>
+<dt class="field-even">Attribute _timers_cv</dt>
+<dd class="field-even"><p>A condition variable that notifies the timer thread to start
+when a timer is added into the _timers heap queue.</p>
+</dd>
+<dt class="field-odd">Attribute _continue</dt>
+<dd class="field-odd"><p>(bool)
+Keeps timer thread active in a loop while True.</p>
+</dd>
+<dt class="field-even">Attribute _continue_lock</dt>
+<dd class="field-even"><p>Lock for _continue to ensure the boolean value can be toggled.</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="mavconn.mavconn.MAVLinkConnection.add_timer">
+<span class="sig-name descname"><span class="pre">add_timer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">period</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">handler</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mavconn/mavconn.html#MAVLinkConnection.add_timer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mavconn.mavconn.MAVLinkConnection.add_timer" title="Permalink to this definition"></a></dt>
+<dd><p>Adds a timer object to heap queue with assoc. repeating period and handler</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>period</strong> – (int)
+The time period in seconds between each time the handler should be called</p></li>
+<li><p><strong>handler</strong> – (func)
+The function that is to be performed at intervals indicated by
+the timer period)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mavconn.mavconn.MAVLinkConnection.clear_handler">
+<span class="sig-name descname"><span class="pre">clear_handler</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">message_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mavconn/mavconn.html#MAVLinkConnection.clear_handler"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mavconn.mavconn.MAVLinkConnection.clear_handler" title="Permalink to this definition"></a></dt>
+<dd><p>Removes all handlers in the stack assoc. with a given MAVLink message type</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>message_name</strong> – (str)
+The type of MAVLink message. For example, ‘HEARTBEAT’</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mavconn.mavconn.MAVLinkConnection.listening_work">
+<span class="sig-name descname"><span class="pre">listening_work</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mavconn/mavconn.html#MAVLinkConnection.listening_work"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mavconn.mavconn.MAVLinkConnection.listening_work" title="Permalink to this definition"></a></dt>
+<dd><p>Target for the listening thread.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mavconn.mavconn.MAVLinkConnection.pop_handler">
+<span class="sig-name descname"><span class="pre">pop_handler</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">message_name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mavconn/mavconn.html#MAVLinkConnection.pop_handler"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mavconn.mavconn.MAVLinkConnection.pop_handler" title="Permalink to this definition"></a></dt>
+<dd><p>Pops the last handler in a stack with a given MAVLink message type</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>message_name</strong> – (str)
+The type of MAVlink message. For example, ‘HEARTBEAT’</p>
+</dd>
+<dt class="field-even">Return handler</dt>
+<dd class="field-even"><p>(func)
+The function that is to be performed
+(associated with a type of MAVLink message)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mavconn.mavconn.MAVLinkConnection.push_handler">
+<span class="sig-name descname"><span class="pre">push_handler</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">message_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">handler</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mavconn/mavconn.html#MAVLinkConnection.push_handler"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mavconn.mavconn.MAVLinkConnection.push_handler" title="Permalink to this definition"></a></dt>
+<dd><p>Pushes MAVLink message and associated handler unto appropriate stack</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>message_name</strong> – (str)
+The type of MAVLink message. For example, ‘HEARTBEAT’</p></li>
+<li><p><strong>handler</strong> – (func)
+The function that is to be performed
+(associated with a type of MAVLink message)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mavconn.mavconn.MAVLinkConnection.start">
+<span class="sig-name descname"><span class="pre">start</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mavconn/mavconn.html#MAVLinkConnection.start"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mavconn.mavconn.MAVLinkConnection.start" title="Permalink to this definition"></a></dt>
+<dd><p>Initializes the timer, listening, and handler worker threads.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mavconn.mavconn.MAVLinkConnection.stop">
+<span class="sig-name descname"><span class="pre">stop</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mavconn/mavconn.html#MAVLinkConnection.stop"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mavconn.mavconn.MAVLinkConnection.stop" title="Permalink to this definition"></a></dt>
+<dd><p>Stops the timer, listening, and handler worker threads.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mavconn.mavconn.MAVLinkConnection.timer_work">
+<span class="sig-name descname"><span class="pre">timer_work</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mavconn/mavconn.html#MAVLinkConnection.timer_work"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mavconn.mavconn.MAVLinkConnection.timer_work" title="Permalink to this definition"></a></dt>
+<dd><p>Target for the timer thread. Processes timers from/to the heap queue</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="mavconn.mavconn.Timer">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mavconn.mavconn.</span></span><span class="sig-name descname"><span class="pre">Timer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">period</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">handler</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mavconn/mavconn.html#Timer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mavconn.mavconn.Timer" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Creates objects with a time period interval, handler, and next calendar
+time for handler call.</p>
+<p>Note:</p>
+<p>Timer objects are comparable based on their _next_time attribute.
+This is useful for popping and pushing onto the heap queue.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>_period</strong> – (int)
+Time interval in seconds between when a handler is called and the next
+time the handler should be called.</p></li>
+<li><p><strong>_handler</strong> – (func)
+The function that is to be performed at intervals indicated by
+the timer period</p></li>
+</ul>
+</dd>
+<dt class="field-even">Attribute _next_time</dt>
+<dd class="field-even"><p>(datetime)
+A datetime that indicates the next calendar time a handler
+should be called.</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="mavconn.mavconn.Timer.handle">
+<span class="sig-name descname"><span class="pre">handle</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mavconn_instance</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mavconn/mavconn.html#Timer.handle"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mavconn.mavconn.Timer.handle" title="Permalink to this definition"></a></dt>
+<dd><p>Passes handler to worker thread and updates _next_time</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mavconn.mavconn.Timer.wait_time">
+<span class="sig-name descname"><span class="pre">wait_time</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mavconn/mavconn.html#Timer.wait_time"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mavconn.mavconn.Timer.wait_time" title="Permalink to this definition"></a></dt>
+<dd><p>Delays timer thread until timer object _next_time is now</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="mavconn.core.html" class="btn btn-neutral float-left" title="mavconn.core module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2017, CETI Foundation.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
