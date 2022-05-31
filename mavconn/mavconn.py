@@ -14,32 +14,32 @@ class MAVLinkConnection:
     """Manages threads that handle mavlink messages
 
     :param _mavfile: A generic mavlink port
-    :param _mav_lock: Threading lock for mavfile
-    :param _timer_thread:
+    :attribute _mav_lock: Threading lock for mavfile
+    :attribute _timer_thread:
         Thread that manages timers associated with periodic handlers
-    :param _listening_thread:
+    :attribute _listening_thread:
         Thread that listens for mav messages and passes handlers to threadpool
-    :param _threadpool:
+    :attribute _threadpool:
         Pool of worker threads that execute handlers passed from timer/listening
         threads
-    :param _stacks_lock:
+    :attribute _stacks_lock:
         Threading lock for _stacks
-    :param _stacks: (dict of str: func)
+    :attribute _stacks: (dict of str: func)
         Contains stacks for various MAVLink message types and the associated
         handlers for those message types. For example,
         {'Heartbeat',[handler1, handler2, handler3']}
-    :param _futures: (list)
+    :attribute _futures: (list)
         Contains futures from jobs submitted to threadpool to keep track of
         unfinished jobs
-    :param _timers: (list)
+    :attribute _timers: (list)
         A heap queue that stores and compares handlers based on
         the time to next call.
-    :param _timers_cv:
+    :attribute _timers_cv:
         A condition variable that notifies the timer thread to start
         when a timer is added into the _timers heap queue.
-    :param _continue: (bool)
+    :attribute _continue: (bool)
         Keeps timer thread active in a loop while True.
-    :param _continue_lock:
+    :attribute _continue_lock:
         Lock for _continue to ensure the boolean value can be toggled.
     """
 
@@ -202,7 +202,7 @@ class Timer:
     :param _handler: (func)
         The function that is to be performed at intervals indicated by
         the timer period
-    :param _next_time: (datetime)
+    :attribute _next_time: (datetime)
         A datetime that indicates the next calendar time a handler
         should be called.
     """
